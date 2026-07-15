@@ -4,7 +4,7 @@
 
 | Action | How |
 |--------|-----|
-| Download | `git clone https://github.com/badrpk/xerus.biz.git` or Code → Download ZIP |
+| Download | `git clone https://github.com/badrpk/xerus.git` or Code → Download ZIP |
 | Star | Click ⭐ on GitHub |
 | Contribute | Open issues and pull requests |
 

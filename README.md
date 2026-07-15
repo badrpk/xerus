@@ -5,7 +5,7 @@ Open **short-form video social** app (TikTok-style), distinct from marketplace o
 ## Download
 
 ```bash
-git clone https://github.com/badrpk/xerus.biz.git
+git clone https://github.com/badrpk/xerus.git
 cd xerus.biz
 ```
 
