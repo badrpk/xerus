@@ -28,3 +28,14 @@ We encourage **download, use, fork, and PRs**.
 | Rangoons | E-commerce |
 | Sophyane | AI agent OS |
 | Xerus | Short video social |
+
+
+## Competitive social API (v2)
+
+TikTok-class feed/upload/like/follow service:
+
+```bash
+cd services/api && python3 server.py
+```
+
+See [COMPETITIVE_PARITY.md](COMPETITIVE_PARITY.md).
