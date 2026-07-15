@@ -5,6 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from http_util import JsonAPI, serve, uid, iso
 import payments as pay
+import auth as authmod
 
 USERS = {
     "u1": {"id": "u1", "handle": "badar", "display": "Badar", "followers": 1200, "following": 180},
@@ -26,10 +27,15 @@ def enrich(v, viewer=None):
 
 class H(JsonAPI):
     def do_GET(self):
+        _path_early = (self.path.split("?")[0].rstrip("/") or "/")
+        if _path_early.startswith("/auth"):
+            hdrs = {k: v for k, v in self.headers.items()}
+            code, body = authmod.handle_auth_request("GET", _path_early, {}, hdrs, product="xerus")
+            return self._send(code, body)
         path, q = self.parse()
         if path in ("/", "/health"):
             return self._send(200, {"ok": True, "service": "xerus", "version": "3.0.0",
-                "gaps_closed": ["boosts", "live", "gifts", "creator_plan", "stripe"]})
+                "gaps_closed": ["boosts", "live", "gifts", "creator_plan", "stripe", "signup", "login", "otp", "oauth_google", "oauth_facebook"]})
         if path == "/capabilities":
             return self._send(200, {"ok": True, "competitor": "TikTok",
                 "features": ["for_you","following","upload","like","comment","follow","boost","live","gifts","creator_billing","stripe"]})
@@ -59,6 +65,12 @@ class H(JsonAPI):
         self._send(404, {"ok": False})
 
     def do_POST(self):
+        _path_early = (self.path.split("?")[0].rstrip("/") or "/")
+        if _path_early.startswith("/auth"):
+            hdrs = {k: v for k, v in self.headers.items()}
+            body = self._read_json() if hasattr(self, "_read_json") else self._read()
+            code, resp = authmod.handle_auth_request("POST", _path_early, body if isinstance(body, dict) else {}, hdrs, product="xerus")
+            return self._send(code, resp)
         path, _ = self.parse()
         body = self._read_json()
         if path == "/videos":
