@@ -1,0 +1,31 @@
+name: Xerus memory journal
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'xerus_memory/**'
+      - 'tests/test_memory_journal.py'
+      - '.github/workflows/memory-journal.yml'
+  pull_request:
+    paths:
+      - 'xerus_memory/**'
+      - 'tests/test_memory_journal.py'
+      - '.github/workflows/memory-journal.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run deterministic memory journal tests
+        run: python -m unittest -v tests.test_memory_journal
